@@ -95,7 +95,7 @@ const LayoutAsoblochain = ({ children }) => {
                         sx={{ mr: 2, position: 'absolute', left: '2%', ...(open && { display: 'none' }) }}>
                         <MenuIcon />
                     </IconButton>
-                    <img className='w-[8em]' src={logoLettersWhite} />
+                    <img className='w-[8em]' src={logoLettersWhite} alt="/" />
                 </Toolbar>
             </AppBar>
 
@@ -113,7 +113,7 @@ const LayoutAsoblochain = ({ children }) => {
                 open={open}>
 
                 <DrawerHeader>
-                    <img className='w-[2em]' src={logoColor} />
+                    <img className='w-[2em]' src={logoColor} alt="/" />
                     <IconButton onClick={handleDrawerClose} sx={{ position: 'absolute', right: 0 }}>
                         <ChevronLeftIcon />
                     </IconButton>

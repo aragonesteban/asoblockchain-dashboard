@@ -10,7 +10,7 @@ export const getLabelMonth = (numberMonth) => {
         case 7: return "Agosto";
         case 8: return "Septiembre";
         case 9: return "Octubre";
-        case 10: return "Diciembre";
-        case 11: return "Enero";
+        case 10: return "Noviembre";
+        default: return "Diciembre";
     }
 }

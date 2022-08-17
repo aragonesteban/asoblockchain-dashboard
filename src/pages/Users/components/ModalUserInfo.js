@@ -5,7 +5,6 @@ import { getLabelWhyDoYouWantBePart } from '../../../utils/getLabelWhyDoYouWantB
 import { WhatsApp } from '@mui/icons-material';
 import { doc, updateDoc } from 'firebase/firestore'
 import { firestore } from '../../../config/init-firebase'
-import { unmountComponentAtNode } from 'react-dom';
 import { isEmpty } from 'lodash';
 
 const Transition = forwardRef(function Transition(props, ref,) {
@@ -94,7 +93,7 @@ class ModalUserInfo extends Component {
           PaperProps={{ style: { width: '100%' } }}
           aria-describedby="alert-dialog-slide-description">
           <div className='p-10 flex flex-col justify-center relative'>
-            <img className='w-[5em] rounded-full self-center' src={photo} />
+            <img className='w-[5em] rounded-full self-center' src={photo} alt="/" />
             <div className='mt-5' />
             <TextField label="Nombre" name='name' variant="outlined" value={name} onChange={this.handleChangeText} />
             <div className='mt-5' />
