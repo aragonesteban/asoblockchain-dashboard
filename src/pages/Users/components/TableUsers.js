@@ -7,11 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import { IconButton, InputAdornment, TablePagination, TextField } from '@mui/material';
+import { IconButton, InputAdornment, MenuItem, TablePagination, TextField } from '@mui/material';
 import { Edit, Search } from '@mui/icons-material';
 import { collection, query, getDocs } from 'firebase/firestore'
 import { firestore } from '../../../config/init-firebase'
 import { getLabelMonth } from '../../../utils/getLabelMonth';
+import { orderBy } from 'lodash';
 
 export default class TableUsers extends Component {
 
@@ -20,7 +21,8 @@ export default class TableUsers extends Component {
         page: 0,
         rowsPerPage: 10,
         searchText: "",
-        usersFiltered: []
+        usersFiltered: [],
+        orderByValue: "order_by_date"
     }
 
     componentDidMount() {
@@ -42,7 +44,9 @@ export default class TableUsers extends Component {
         result.docs.forEach((item) => {
             users = [...users, { ...item.data(), id: item.id }]
         })
-        this.setState({ users, usersFiltered: users })
+        this.setState({ users, usersFiltered: users }, () => {
+            this.handleChangeOrderBy({ target: { value: "order_by_date" } })
+        })
     }
 
     setLabelSubscription(suscription) {
@@ -69,15 +73,30 @@ export default class TableUsers extends Component {
         let newUsers = []
         if (event.target.value !== "") {
             newUsers = this.state.users.filter((user) => {
-                console.log(user.name.toLowerCase().includes(event.target.value.toLowerCase()))
                 return user.name.toLowerCase().includes(event.target.value.toLowerCase())
             })
         } else {
             newUsers = this.state.users
         }
-        console.log(event.target.value)
         this.setState({ searchText: event.target.value, usersFiltered: newUsers })
     }
+
+    handleChangeOrderBy = (event) => {
+        let newUsers = []
+        switch (event.target.value) {
+            case 'order_by_date': newUsers = this.handleOrderByDate(); break;
+            case 'order_by_subscription': newUsers = this.handleOrderBySubscription(); break;
+            case 'order_by_pay': newUsers = this.handleOrderByPay(); break;
+            default: newUsers = this.state.users; break;
+        }
+        this.setState({ orderByValue: event.target.value, usersFiltered: newUsers })
+    }
+
+    handleOrderByDate = () =>  orderBy(this.state.users, (user) => user.dateInscription, "desc")
+    
+    handleOrderBySubscription = () => orderBy(this.state.users, (user) => user.subscription, "desc")
+
+    handleOrderByPay = () => orderBy(this.state.users, (user) => user.hasPaid, "desc")
 
     componentDidUpdate() {
         const { setUpdateTable, updateTable } = this.props
@@ -88,16 +107,23 @@ export default class TableUsers extends Component {
     }
 
     render() {
-        const { usersFiltered, page, rowsPerPage, searchText } = this.state
+        const { usersFiltered, page, rowsPerPage, searchText, orderByValue } = this.state
         return (
             <div>
-                <TextField label="Buscar por nombre" name='search' variant="outlined" type="text" value={searchText} onChange={this.handleSearch} InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <Search />
-                        </InputAdornment>
-                    ),
-                }} />
+                <div className='flex justify-between items-center'>
+                    <TextField label="Buscar por nombre" name='search' variant="outlined" type="text" value={searchText} onChange={this.handleSearch} InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <Search />
+                            </InputAdornment>
+                        ),
+                    }} />
+                    <TextField className='w-[20em]' label="Ordenar por" variant="outlined" value={orderByValue} select onChange={this.handleChangeOrderBy}>
+                        <MenuItem value="order_by_date">Fecha</MenuItem>
+                        <MenuItem value="order_by_subscription">Suscripciôn</MenuItem>
+                        <MenuItem value="order_by_pay">Pago</MenuItem>
+                    </TextField>
+                </div>
                 <div className='mt-6' />
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
