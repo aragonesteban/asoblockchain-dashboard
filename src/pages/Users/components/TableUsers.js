@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import { IconButton, InputAdornment, TablePagination, TextField } from '@mui/material';
-import { AccountCircle, Edit, Search } from '@mui/icons-material';
+import { Edit, Search } from '@mui/icons-material';
 import { collection, query, getDocs } from 'firebase/firestore'
 import { firestore } from '../../../config/init-firebase'
 import { getLabelMonth } from '../../../utils/getLabelMonth';
