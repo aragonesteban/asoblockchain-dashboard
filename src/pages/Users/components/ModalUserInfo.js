@@ -100,7 +100,7 @@ class ModalUserInfo extends Component {
             <div className='mt-5' />
             <TextField label="Email" name='email' variant="outlined" type="email" value={email} onChange={this.handleChangeText} />
             <div className='mt-5' />
-            <div className='grid grid-cols-[20%_80%] gap-2'>
+            <div className='grid grid-cols-[20%_80%] gap-2 pr-2'>
               <TextField label="Indicativo" name='indicative' variant="outlined" value={indicative} onChange={this.handleChangeText} />
               <TextField label="Nûmero de teléfono" name='phone' variant="outlined" type="number" value={phone} onChange={this.handleChangeText} />
             </div>
