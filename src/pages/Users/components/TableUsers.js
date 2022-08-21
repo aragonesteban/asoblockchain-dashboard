@@ -7,9 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import { IconButton, InputAdornment, MenuItem, TablePagination, TextField } from '@mui/material';
-import { Edit, Search } from '@mui/icons-material';
-import { collection, query, getDocs } from 'firebase/firestore'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, MenuItem, TablePagination, TextField } from '@mui/material';
+import { Delete, Edit, Search } from '@mui/icons-material';
+import { collection, query, getDocs, doc, deleteDoc } from 'firebase/firestore'
 import { firestore } from '../../../config/init-firebase'
 import { getLabelMonth } from '../../../utils/getLabelMonth';
 import { orderBy } from 'lodash';
@@ -22,7 +22,9 @@ export default class TableUsers extends Component {
         rowsPerPage: 10,
         searchText: "",
         usersFiltered: [],
-        orderByValue: "order_by_date"
+        orderByValue: "order_by_date",
+        openConfirmationDelete: false,
+        userIdToDelete: ""
     }
 
     componentDidMount() {
@@ -92,11 +94,25 @@ export default class TableUsers extends Component {
         this.setState({ orderByValue: event.target.value, usersFiltered: newUsers })
     }
 
-    handleOrderByDate = () =>  orderBy(this.state.users, (user) => user.dateInscription, "desc")
-    
+    handleOrderByDate = () => orderBy(this.state.users, (user) => user.dateInscription, "desc")
+
     handleOrderBySubscription = () => orderBy(this.state.users, (user) => user.subscription, "desc")
 
     handleOrderByPay = () => orderBy(this.state.users, (user) => user.hasPaid, "desc")
+
+    toggleConfirmationDelete = (value, userIdToDelete = null) => {
+        if (userIdToDelete) {
+            this.setState({ userIdToDelete: userIdToDelete })
+        }
+        this.setState({ openConfirmationDelete: value })
+    }
+
+    deleteUser = async () => {
+        deleteDoc(doc(firestore, "community members", this.state.userIdToDelete)).then(() => {
+            this.toggleConfirmationDelete(false)
+            this.getUsersList()
+        })
+    }
 
     componentDidUpdate() {
         const { setUpdateTable, updateTable } = this.props
@@ -107,7 +123,7 @@ export default class TableUsers extends Component {
     }
 
     render() {
-        const { usersFiltered, page, rowsPerPage, searchText, orderByValue } = this.state
+        const { usersFiltered, page, rowsPerPage, searchText, orderByValue, openConfirmationDelete } = this.state
         return (
             <div>
                 <div className='flex justify-between items-center'>
@@ -137,6 +153,7 @@ export default class TableUsers extends Component {
                                 <TableCell sx={{ color: 'white' }}>Suscripción</TableCell>
                                 <TableCell sx={{ color: 'white' }}>¿Ha pagado?</TableCell>
                                 <TableCell />
+                                <TableCell />
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -158,6 +175,11 @@ export default class TableUsers extends Component {
                                             <Edit />
                                         </IconButton>
                                     </TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={this.toggleConfirmationDelete.bind(null, true, user.id)}>
+                                            <Delete color="error" />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -172,6 +194,22 @@ export default class TableUsers extends Component {
                     onPageChange={this.handleChangePage}
                     onRowsPerPageChange={this.handleChangeRowsPerPage}
                 />
+                <Dialog
+                    open={openConfirmationDelete}
+                    onClose={this.toggleConfirmationDelete.bind(null, false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description">
+                    <DialogTitle id="alert-dialog-title">Eliminar registro</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Estás seguro de eliminar este registro?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.toggleConfirmationDelete.bind(null, false)}>Cancelar</Button>
+                        <Button onClick={this.deleteUser}>Eliminar</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }
