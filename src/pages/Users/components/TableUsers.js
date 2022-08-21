@@ -50,7 +50,6 @@ export default class TableUsers extends Component {
 
     openModalUserInfo(user) {
         user = { ...user, dateInscription: this.setLabelDateInscription(user.dateInscription) }
-        console.log(user)
         this.props.toggleModalUserInfo(true, user)
     }
 

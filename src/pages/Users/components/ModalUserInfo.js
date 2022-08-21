@@ -1,5 +1,5 @@
 import React, { forwardRef, Component } from 'react'
-import { Button, Checkbox, Dialog, FormControlLabel, MenuItem, Slide, TextField } from '@mui/material'
+import { Avatar, Button, Checkbox, Dialog, FormControlLabel, MenuItem, Slide, TextField } from '@mui/material'
 import { getLabelHowYouKnowUs } from '../../../utils/getLabelHowYouKnowUs';
 import { getLabelWhyDoYouWantBePart } from '../../../utils/getLabelWhyDoYouWantBePart';
 import { WhatsApp } from '@mui/icons-material';
@@ -83,7 +83,8 @@ class ModalUserInfo extends Component {
         howYouKnowAsoblockchain,
         whyDoYouWantBePart,
         subscription,
-        hash
+        hash,
+        email
       } = userInfo
       return (
         <Dialog
@@ -93,11 +94,16 @@ class ModalUserInfo extends Component {
           PaperProps={{ style: { width: '100%' } }}
           aria-describedby="alert-dialog-slide-description">
           <div className='p-10 flex flex-col justify-center relative'>
-            <img className='w-[5em] rounded-full self-center' src={photo} alt="/" />
+            <Avatar className='self-center' alt="/" src={photo} style={{ width: '5em', height: '5em' }} />
             <div className='mt-5' />
-            <TextField label="Nombre" name='name' variant="outlined" value={name} onChange={this.handleChangeText} />
+            <TextField label="Nombre" name='name' variant="outlined" type="text" value={name} onChange={this.handleChangeText} />
             <div className='mt-5' />
-            <TextField label="Nûmero de teléfono" name='phone' variant="outlined" value={`${indicative} ${phone}`} onChange={this.handleChangeText} />
+            <TextField label="Email" name='email' variant="outlined" type="email" value={email} onChange={this.handleChangeText} />
+            <div className='mt-5' />
+            <div className='grid grid-cols-[20%_80%] gap-2'>
+              <TextField label="Indicativo" name='indicative' variant="outlined" value={indicative} onChange={this.handleChangeText} />
+              <TextField label="Nûmero de teléfono" name='phone' variant="outlined" type="number" value={phone} onChange={this.handleChangeText} />
+            </div>
             <div className='mt-5' />
             <TextField label="Dirección" name='address' variant="outlined" value={address} onChange={this.handleChangeText} />
             <div className='mt-5' />
