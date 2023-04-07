@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "asoblockchain-2022"
+  },
+  "targets": {
+    "asoblockchain-2022": {
+      "hosting": {
+        "dashboard": [
+          "asoblockchain-dashboard"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
