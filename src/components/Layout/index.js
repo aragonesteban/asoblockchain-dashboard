@@ -17,7 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import logoColor from '../../assets/logo_color.png'
 import logoLettersWhite from '../../assets/logo_letters_white.png'
 import { routes } from '../../routes';
-import { useLocation, NavLink } from 'react-router-dom'
+import { useLocation, NavLink, Outlet } from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -139,7 +139,7 @@ const LayoutAsoblochain = ({ children }) => {
 
             <Main open={open}>
                 <DrawerHeader />
-                {children}
+                <Outlet />
             </Main>
 
         </Box>
