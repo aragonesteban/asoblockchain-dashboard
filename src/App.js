@@ -10,6 +10,7 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import { RequireAuth } from './components/RequireAuth';
+import PolicyPrivacy from './pages/PolicyPrivacy';
 
 function App() {
   return (
@@ -24,6 +25,11 @@ function App() {
           <Route path="/settings" element={
             <RequireAuth>
               <Settings />
+            </RequireAuth>
+          } />
+          <Route path="/policy-and-privacy" element={
+            <RequireAuth>
+              <PolicyPrivacy />
             </RequireAuth>
           } />
         </Route>
